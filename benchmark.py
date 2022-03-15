@@ -207,9 +207,13 @@ class BenchmarkRunner():
         result['model_name'] = self.conf.model_dir.split('/')[-1]
         result['detail'] = perf_result
         result['avg_cost'] = perf_result['result']['avg_cost']
-        result['h2d_cost'] = np.mean(self.h2d_time)
-        result['d2h_cost'] = np.mean(self.d2h_time)
-        result['compute_cost'] = np.mean(self.compute_time)
+        result['h2d_cost'] = float(format(np.mean(
+            self.h2d_time), '.6f')) if len(self.h2d_time) > 0 else 0
+        result['d2h_cost'] = float(format(np.mean(
+            self.d2h_time), '.6f')) if len(self.d2h_time) > 0 else 0
+        result['compute_cost'] = float(
+            format(np.mean(self.compute_time), '.6f')) if len(
+                self.compute_time) > 0 else 0
         result['gpu_stat'] = self.gpu_stat.output()
         if self.conf.enable_gpu:
             result['device_name'] = result['gpu_stat']['name']
