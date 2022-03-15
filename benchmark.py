@@ -77,7 +77,10 @@ class GPUStat(GPUStatBase):
         result = gpu_info_list[0]
         for item in gpu_info_list:
             for k in item.keys():
-                result[k] = max(result[k], item[k])
+                if k not in ["name", "uuid", "timestamp"]:
+                    result[k] = max(int(result[k]), int(item[k]))
+                else:
+                    result[k] = max(result[k], item[k])
         self.result = result
 
     def output(self):
