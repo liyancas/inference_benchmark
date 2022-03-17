@@ -193,9 +193,6 @@ class BenchmarkRunner():
             begin = time.time()
             self.backend.predict()
             self.time_data.append(time.time() - begin)
-        self.h2d_time = self.backend.h2d_time
-        self.d2h_time = self.backend.d2h_time
-        self.compute_time = self.backend.compute_time
 
     def report(self):
         self.gpu_stat.stop()
