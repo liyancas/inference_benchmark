@@ -196,7 +196,7 @@ class BenchmarkRunner():
             self.backend.predict()
             min_run_time += time.time() - begin
             run_count = run_count + 1
-            self.time_data.append(time.time() - begin)
+            self.time_data.append(min_run_time)
         #print("The run count is %d" % run_count)
 
     def report(self):
