@@ -197,7 +197,7 @@ class BenchmarkRunner():
             min_run_time += time.time() - begin
             run_count = run_count + 1
             self.time_data.append(time.time() - begin)
-        print("The run count is %d" % run_count)
+        #print("The run count is %d" % run_count)
 
     def report(self):
         self.gpu_stat.stop()
