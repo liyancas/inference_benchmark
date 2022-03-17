@@ -32,8 +32,6 @@ class BackendPaddle(backend.Backend):
         self.h2d_time = []
         self.compute_time = []
         self.d2h_time = []
-        self.input_tensor = [] 
-        self.output_tensor = [] 
 
     def version(self):
         # paddle.version.commit
@@ -98,8 +96,7 @@ class BackendPaddle(backend.Backend):
         # set input tensor
         input_names = self.predictor.get_input_names()
         for i, name in enumerate(input_names):
-            if not self.input_tensor:
-                self.input_tensor.append(self.predictor.get_input_handle(name))
+            input_tensor = self.predictor.get_input_handle(name)
             if self.args.yaml_config["input_shape"][str(i)]["shape"][
                     self.args.test_num][0] == -1:
                 input_shape = [self.args.batch_size] + self.args.yaml_config[
@@ -115,17 +112,15 @@ class BackendPaddle(backend.Backend):
                 fake_input = self.args.test_data[i].astype(getdtype(dtype))
             else:
                 fake_input = np.ones(input_shape, dtype=getdtype(dtype))
-            self.input_tensor[i].copy_from_cpu(fake_input)
+            input_tensor.copy_from_cpu(fake_input)
 
     def set_output(self):
         results = []
         # get out data from output tensor
         output_names = self.predictor.get_output_names()
-        if not self.output_tensor:
-            for name in output_names:
-                self.output_tensor.append(self.predictor.get_output_handle(name))
         for i, name in enumerate(output_names):
-            output_data = self.output_tensor[i].copy_to_cpu()
+            output_tensor = self.predictor.get_output_handle(name)
+            output_data = output_tensor.copy_to_cpu()
             if self.args.return_result:
                 results.append(output_data)
         if self.args.return_result:
