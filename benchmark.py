@@ -187,12 +187,17 @@ class BenchmarkRunner():
 
         for i in range(self.warmup_times):
             self.backend.predict()
-
+       
+        run_count = 0
+        min_run_time = 0
         self.backend.reset()
-        for i in range(self.run_times):
+        while (run_count < self.run_times ) or (min_run_time < 2):
             begin = time.time()
             self.backend.predict()
+            min_run_time += time.time() - begin
+            run_count = run_count + 1
             self.time_data.append(time.time() - begin)
+        print("The run count is %d" % run_count)
 
     def report(self):
         self.gpu_stat.stop()
